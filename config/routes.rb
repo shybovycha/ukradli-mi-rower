@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
-  devise_for :users
-  resources :alerts
+  # devise_for :users
+  # resources :alerts
+  #
+  # resources :bikes
+  #
+  # root "alerts#index"
+  #
 
-  resources :bikes
-
-  root "alerts#index"
+  mount API => '/'
 end

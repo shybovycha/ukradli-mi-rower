@@ -1,20 +1,8 @@
-module Apis
-  class Bikes < Grape::API
-    version 'v1', using: :header
+module BikesApi
+  class Users < Grape::API
+    #version 'v1', using: :path, vendor: 'wiewiórka team'
     format :json
-    prefix :api
-
-    helpers do
-      def current_user
-        unless @current_user.present?
-          @current_user = User.find(api_key: session[:api_key])
-        end
-      end
-
-      def authenticate!
-        error!('401 Unauthorized', 401) unless current_user
-      end
-    end
+    #prefix :api
 
     resource :users do
       desc "registers a user"

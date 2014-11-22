@@ -77,4 +77,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.default_url_options = { host: 'ukradli-mi-rower.eu-gb.mybluemix.net' }
+
+  config.action_controller.allow_forgery_protection    = false
 end
