@@ -3,7 +3,6 @@ module BikesApi
     #version 'v1', using: :path, vendor: 'wiewiórka team'
     format :json
     content_type :json, 'application/json; charset=utf-8'
-    #prefix :api
 
     helpers do
       def get_user
@@ -29,23 +28,18 @@ module BikesApi
         requires :description, type: String, desc: "bike description"
         requires :images, type: Array
       end
-      post :create do
+      post do
         authenticate!
 
         bike = get_user.bikes.new(title: params[:title], description: params[:description])
 
         errors = []
 
-        byebug
-
         unless bike.save
           errors += bike.errors.full_messages
         end
 
         params[:images].each do |image|
-          byebug
-
-          #new_file = ActionDispatch::Http::UploadedFile.new(image[:image])
           bike_img = bike.images.new image: image[:tempfile]
 
           unless bike_img.save

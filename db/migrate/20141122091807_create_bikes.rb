@@ -3,6 +3,7 @@ class CreateBikes < ActiveRecord::Migration
     create_table :bikes do |t|
       t.string :title
       t.text :description
+      t.integer :user_id
 
       t.timestamps
     end

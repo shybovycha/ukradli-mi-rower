@@ -2,7 +2,6 @@ module BikesApi
   class Users < Grape::API
     #version 'v1', using: :path, vendor: 'wiewiórka team'
     format :json
-    #prefix :api
 
     resource :users do
       desc "registers a user"
@@ -13,7 +12,7 @@ module BikesApi
         requires :password_confirmation, type: String, desc: "password confirmation"
       end
       post :sign_up do
-        user = User.new params
+        user = User.new(name: params[:name], email: params[:email], password: params[:password], password_confirmation: params[:password_confirmation])
 
         if user.save
           { success: true, api_key: user.api_key }

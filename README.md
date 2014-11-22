@@ -10,9 +10,8 @@ Serwer nadaję API do korzystania aplikacji mobilnej.
 * `POST /users/sign_up`
 * `POST /users/sign_in`
 * `POST /users/restore_session`
-* `POST /bikes/create`
+* `POST /bikes`
 * `POST /alerts/lost`
 * `POST /alerts/found`
 * `GET /alerts/lost`
 * `GET /alerts/lost/:id`
-* `GET /alerts/`
