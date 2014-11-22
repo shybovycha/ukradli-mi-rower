@@ -20,6 +20,10 @@ gem 'grape-entity'
 gem 'hashie_rails'
 #gem 'grape-rails-routes'
 
+group :production do
+  gem 'mysql2'
+end
+
 group :development, :test do
   gem 'rest-client'
   gem 'byebug'

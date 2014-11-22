@@ -21,5 +21,8 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  database: d7f403a72a8e94f8aa64140e0de463883
+  host: 159.8.128.49
+  port: 3307
+  user: uE2is1agdyKms
+  password: pixzFW2G5qvwp
