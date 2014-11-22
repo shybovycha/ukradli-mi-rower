@@ -1,0 +1,2 @@
+class LostAlert < Alert
+end

@@ -1,0 +1,2 @@
+class FoundAlert < Alert
+end
