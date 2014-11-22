@@ -106,6 +106,7 @@ module BikesApi
         requires :description, type: String, desc: "bike description"
         requires :lat, type: Float, desc: "latitude"
         requires :lon, type: Float, desc: "longitude"
+        optional :images, type: Array
       end
       post :found do
         authenticate!
@@ -120,10 +121,26 @@ module BikesApi
 
         alert.lost_alert = parent_alert
 
-        if alert.save
+        errors = []
+
+        unless alert.save
+          errors += alert.errors.full_messages
+        end
+
+        if params[:images].present?
+          params[:images].each do |image|
+            bike_img = alert.images.new image: image[:tempfile]
+
+            unless bike_img.save
+              errors += bike_img.errors.full_messages
+            end
+          end
+        end
+
+        if errors.empty?
           { success: true }
         else
-          { success: false, message: alert.errors.full_messages.join(' and ') }
+          { success: false, message: errors.join(' and ') }
         end
       end
 

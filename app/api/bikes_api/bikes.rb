@@ -26,7 +26,7 @@ module BikesApi
         requires :api_key, type: String, desc: "api key"
         requires :title, type: String, desc: "bike model"
         requires :description, type: String, desc: "bike description"
-        requires :images, type: Array
+        optional :images, type: Array
       end
       post do
         authenticate!
@@ -39,11 +39,13 @@ module BikesApi
           errors += bike.errors.full_messages
         end
 
-        params[:images].each do |image|
-          bike_img = bike.images.new image: image[:tempfile]
+        if params[:images].present?
+          params[:images].each do |image|
+            bike_img = bike.images.new image: image[:tempfile]
 
-          unless bike_img.save
-            errors += bike_img.errors.full_messages
+            unless bike_img.save
+              errors += bike_img.errors.full_messages
+            end
           end
         end
 
