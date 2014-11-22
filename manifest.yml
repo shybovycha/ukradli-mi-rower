@@ -1,0 +1,6 @@
+---
+applications:
+- name: ukradli-moj-rower
+  memory: 512M
+  host: nifty
+  buildpack: https://github.com/shybovycha/ruby-buildpack.git
