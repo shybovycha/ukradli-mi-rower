@@ -20,7 +20,7 @@ module BikesApi
         expose :lat
         expose :lon
 
-        expose :user, as: :author, using: User
+        expose :user, as: :author, using: Entities::User
 
         expose :images do |alert|
           alert.images.map { |e| e.image.url }
@@ -89,7 +89,7 @@ module BikesApi
         authenticate!
 
         alert = get_user.lost_alerts.new(title: params[:title], description: params[:description], lat: params[:lat], lon: params[:lon])
-        alert.images = get_user.bikes.first.images
+        alert.images = get_user.bikes.first.images unless get_user.bikes.empty?
 
         if alert.save
           { success: true }
