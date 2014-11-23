@@ -23,7 +23,7 @@ module BikesApi
         expose :user, as: :author, using: Entities::User
 
         expose :images do |alert|
-          alert.images.map { |e| e.image.url }
+          alert.images.map { |e| e.image.url(:full) }
         end
 
         with_options(format_with: :iso_timestamp) do
@@ -84,17 +84,45 @@ module BikesApi
         requires :description, type: String, desc: "description (bike description)"
         requires :lat, type: Float, desc: "latitude"
         requires :lon, type: Float, desc: "longitude"
+        optional :images, type: Array
       end
       post :lost do
         authenticate!
 
         alert = get_user.lost_alerts.new(title: params[:title], description: params[:description], lat: params[:lat], lon: params[:lon])
-        alert.images = get_user.bikes.first.images unless get_user.bikes.empty?
 
-        if alert.save
+        errors = []
+
+        unless alert.save
+          errors += alert.errors.full_messages
+        end
+
+        if params[:images].present?
+          params[:images].each do |image|
+            if image.is_a? Hash
+              bike_img = alert.images.new image: image[:tempfile]
+            else
+              data = StringIO.new(Base64.decode64(image))
+              data.class.class_eval {attr_accessor :original_filename, :content_type}
+              data.original_filename = 'img1.jpeg'
+              data.content_type = 'image/jpeg'
+              bike_img = alert.images.new image: data
+            end
+
+            unless bike_img.save
+              errors += bike_img.errors.full_messages
+            end
+          end
+        end
+
+        if alert.images.empty? and not get_user.bikes.empty?
+          alert.images = get_user.bikes.first.images
+        end
+
+        if errors.empty?
           { success: true }
         else
-          { success: false, message: alert.errors.full_messages.join(' and ') }
+          { success: false, message: errors.join(' and ') }
         end
       end
 
@@ -129,7 +157,15 @@ module BikesApi
 
         if params[:images].present?
           params[:images].each do |image|
-            bike_img = alert.images.new image: image[:tempfile]
+            if image.is_a? Hash
+              bike_img = alert.images.new image: image[:tempfile]
+            else
+              data = StringIO.new(Base64.decode64(image))
+              data.class.class_eval {attr_accessor :original_filename, :content_type}
+              data.original_filename = 'img1.jpeg'
+              data.content_type = 'image/jpeg'
+              bike_img = alert.images.new image: data
+            end
 
             unless bike_img.save
               errors += bike_img.errors.full_messages

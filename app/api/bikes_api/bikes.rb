@@ -41,7 +41,15 @@ module BikesApi
 
         if params[:images].present?
           params[:images].each do |image|
-            bike_img = bike.images.new image: image[:tempfile]
+            if image.is_a? Hash
+              bike_img = alert.images.new image: image[:tempfile]
+            else
+              data = StringIO.new(Base64.decode64(image))
+              data.class.class_eval {attr_accessor :original_filename, :content_type}
+              data.original_filename = 'img1.jpeg'
+              data.content_type = 'image/jpeg'
+              bike_img = alert.images.new image: data
+            end
 
             unless bike_img.save
               errors += bike_img.errors.full_messages
