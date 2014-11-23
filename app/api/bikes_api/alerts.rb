@@ -23,7 +23,7 @@ module BikesApi
         expose :user, as: :author, using: Entities::User
 
         expose :images do |alert|
-          alert.images.map { |e| e.image.url(:full) }
+          alert.images.map { |e| e.image.url(:original) }
         end
 
         with_options(format_with: :iso_timestamp) do
