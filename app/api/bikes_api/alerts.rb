@@ -156,7 +156,7 @@ module BikesApi
         alert = LostAlert.find(params[:id])
 
         if alert.present?
-          { success: true, alert: alert }
+          { success: true, alert: Entities::LostAlert.new(alert) }
         else
           { success: false, message: "wrong lost alert id" }
         end

@@ -18,7 +18,6 @@ gem 'grape-entity'
 
 # disable strong-params in the Grape's advantage
 gem 'hashie_rails'
-#gem 'grape-rails-routes'
 
 group :production do
   gem 'mysql2'
